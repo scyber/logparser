@@ -20,4 +20,5 @@ out/
 # Temporary files
 *.tmp
 *.swp
+dependency-reduced-pom.xml
 
