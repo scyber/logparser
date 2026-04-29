@@ -4,42 +4,44 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.example.parcer.Parser;
-import com.example.parcer.LogParser;
-import com.example.tracker.DurationTracker;
-import com.example.tracker.FacadTracker;
-import com.example.tracker.Tracker;
+import com.example.parser.ProfilingEventParser;
+import com.example.processing.EventProcessor;
+import com.example.processing.StepAggregator;
+import com.example.reporting.ReportPrinter;
+
 
 public class LogAnalyser {
 
     private static final Logger logger = LoggerFactory.getLogger(LogAnalyser.class);
 
-    public static void main(String[] args) throws IOException {
-        if (args.length != 1) {
-            logger.warn("Usage: LogAnalyzer <logfile>");
-            return;
-        }
+    public static void main(String[] args) {
+    	if (args.length != 1) {
+        	System.err.println("Usage: java -jar log-analyzer.jar <logfile>");
+        	System.exit(1);
+    	}
 
-        Parser parser = new LogParser();
-        FacadTracker tracker = new DurationTracker();
+    	Path logFile = Paths.get(args[0]);
 
-        try (BufferedReader reader = Files.newBufferedReader(Path.of(args[0]))) {
-            reader.lines()
-                    .map(parser::parse)
-                    .flatMap(Optional::stream)
-                    .filter(e -> e.stepPath().startsWith("DEVICE_TEST"))
-                    .forEach(tracker::handle);
-        }
+    	ProfilingEventParser parser = new ProfilingEventParser();
+    	StepAggregator aggregator = new StepAggregator();
+    	EventProcessor processor = new EventProcessor(aggregator);
 
-        tracker.getResult().forEach((k, v) -> {
-            System.out.printf(
-                    "Subtest: %s | count=%d avg=%dms max=%dms%n",
-                    k, v.count(), v.avg(), v.max());
-        });
-    }
+    	try (BufferedReader reader = Files.newBufferedReader(logFile)) {
+        	reader.lines()
+              	.map(parser::parse)
+              	.flatMap(Optional::stream)
+              	.forEach(processor::process);
+    	} catch (IOException e) {	
+			logger.error(e.getMessage());
+		
+		}
+
+    	ReportPrinter.printSubtestSummary(aggregator);
+	}
+
 
 }
