@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 public class DurationStats {
 
     private static final Logger log = LoggerFactory.getLogger(DurationStats.class);
+    
+    //ToDo Threshold could be in a param command line for better way and flexibility
     private static final Duration THRESHOLD = Duration.ofMillis(300);
 
     private long count = 0;

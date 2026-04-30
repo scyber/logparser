@@ -23,8 +23,10 @@ public class EventProcessor {
 
     public void process(ProfilingEvent event) {
         if (event.getType() == EventType.BEGIN) {
-            if(event.getQualifier().orElse(null) != null)
-                logger.info("Even Processed {}", event.getQualifier().get());
+            if(event.getQualifier().orElse(null) != null){
+                logger.info("Event Processed {}", event.getQualifier().get());
+                
+            }
             
             stack.push(new ActiveStep(event));
             return;
