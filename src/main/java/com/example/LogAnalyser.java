@@ -24,14 +24,16 @@ public class LogAnalyser {
 		}
 		logger.info("Parsing Log started {}", LocalDateTime.now());
 		Path logFile = Paths.get(args[0]);
+		//Path logFile = Paths.get("event.log");
 
 		ProfilingEventParser parser = new ProfilingEventParser();
 		StepAggregator aggregator = new StepAggregator();
 		EventProcessor processor = new EventProcessor(aggregator);
 
-		ProfilingEventSource source = new FileProfilingEventSource(logFile, parser);
-		source.events().forEach(processor::process);
-		source.close();
+		try(ProfilingEventSource source = new FileProfilingEventSource(logFile, parser)){
+			source.events().forEach(processor::process);
+		}
+		
 
 		ReportPrinter.printSubtestSummary(aggregator);
 		logger.info("Parsing finished {}", LocalDateTime.now());

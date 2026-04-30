@@ -18,8 +18,9 @@ public class ReportPrinter {
             	"%-30s %8d %10d %10d%n",
             	e.getKey(),
             	s.getCount(),
-            	s.getAverage().toMillis(),
+            	s.getAverage().abs().toMillis(),
             	s.getMax().toMillis()
+				
         	);
     	}
 	}

@@ -13,7 +13,7 @@ out/
 
 # Log files
 *.log
-
+.vscode
 # OS files
 .DS_Store
 

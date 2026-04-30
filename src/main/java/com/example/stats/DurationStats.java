@@ -1,19 +1,38 @@
 package com.example.stats;
 
 import java.time.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DurationStats {
+
+    private static final Logger log = LoggerFactory.getLogger(DurationStats.class);
+    private static final Duration THRESHOLD = Duration.ofMillis(300);
 
     private long count = 0;
     private Duration total = Duration.ZERO;
     private Duration max = Duration.ZERO;
+    private Duration currentDeviation = Duration.ZERO;
 
-    public void add(Duration d) {
+
+    public Duration add(Duration d) {
         count++;
         total = total.plus(d);
+
         if (d.compareTo(max) > 0) {
             max = d;
         }
+
+        currentDeviation = calculateDeviation(d);
+        //ToDo compare to THRESHOLD
+        if (currentDeviation.compareTo(THRESHOLD) > 0) {
+            log.warn(
+                "Duration deviation exceeded threshold: current(ms)={}, average(ms)={}, deviation(ms)={}, threshold(ms)={}",
+                d.toMillis(), getAverage().toMillis(), currentDeviation.toMillis(), THRESHOLD.toMillis()
+            );
+        }
+
+        return currentDeviation;
     }
 
     public long getCount() {
@@ -28,4 +47,17 @@ public class DurationStats {
         return max;
     }
 
+    public Duration getCurrentDeviation() {
+        return currentDeviation;
+    }
+
+    private Duration calculateDeviation(Duration d) {
+        if (count < 2) {
+            return Duration.ZERO;
+        }
+
+        Duration average = getAverage();
+        Duration cDuration = d.abs();
+        return cDuration.minus(average).abs();
+    }
 }
