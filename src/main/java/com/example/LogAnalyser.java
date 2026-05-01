@@ -18,22 +18,22 @@ public class LogAnalyser {
 	private static final Logger logger = LoggerFactory.getLogger(LogAnalyser.class);
 
 	public static void main(String[] args) {
-		if (args.length != 1) {
-			System.err.println("Usage: java -jar log-analyzer.jar <logfile>");
+		if (args.length < 2) {
+			System.err.println("sage: java -jar log-analyzer.jar <logfile> <threshold_ms>");
 			System.exit(1);
 		}
-		logger.info("Parsing Log started {}", LocalDateTime.now());
+		logger.info("Parsing log started {}", LocalDateTime.now());
 		Path logFile = Paths.get(args[0]);
-		//Path logFile = Paths.get("event.log");
+		long thresholdValue = Long.parseLong(args[1]);
+		// Path logFile = Paths.get("event.log");
 
 		ProfilingEventParser parser = new ProfilingEventParser();
-		StepAggregator aggregator = new StepAggregator();
+		StepAggregator aggregator = new StepAggregator(thresholdValue);
 		EventProcessor processor = new EventProcessor(aggregator);
 
-		try(ProfilingEventSource source = new FileProfilingEventSource(logFile, parser)){
+		try (ProfilingEventSource source = new FileProfilingEventSource(logFile, parser)) {
 			source.events().forEach(processor::process);
 		}
-		
 
 		ReportPrinter.printSubtestSummary(aggregator);
 		logger.info("Parsing finished {}", LocalDateTime.now());

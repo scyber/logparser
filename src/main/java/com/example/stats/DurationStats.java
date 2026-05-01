@@ -7,31 +7,36 @@ import org.slf4j.LoggerFactory;
 public class DurationStats {
 
     private static final Logger log = LoggerFactory.getLogger(DurationStats.class);
-    
-    //ToDo Threshold could be in a param command line for better way and flexibility
-    private static final Duration THRESHOLD = Duration.ofMillis(300);
+
+    // ToDo Threshold could be in a param command line for better way and
+    // flexibility
+
+    private final Duration treshHoldValue;
+
+    public DurationStats(long thresholdValue) {
+        this.treshHoldValue = Duration.ofMillis(thresholdValue);
+    }
 
     private long count = 0;
     private Duration total = Duration.ZERO;
     private Duration max = Duration.ZERO;
     private Duration currentDeviation = Duration.ZERO;
 
-
-    public Duration add(Duration d) {
+    public Duration add(Duration currentDuration) {
         count++;
-        total = total.plus(d);
+        total = total.plus(currentDuration);
 
-        if (d.compareTo(max) > 0) {
-            max = d;
+        if (currentDuration.compareTo(max) > 0) {
+            max = currentDuration;
         }
 
-        currentDeviation = calculateDeviation(d);
-        //ToDo compare to THRESHOLD
-        if (currentDeviation.compareTo(THRESHOLD) > 0) {
+        currentDeviation = calculateDeviation(currentDuration);
+        // ToDo compare to THRESHOLD
+        if (currentDuration.compareTo(treshHoldValue) > 0) {
             log.warn(
-                "Duration deviation exceeded threshold: current(ms)={}, average(ms)={}, deviation(ms)={}, threshold(ms)={}",
-                d.toMillis(), getAverage().toMillis(), currentDeviation.toMillis(), THRESHOLD.toMillis()
-            );
+                    "Duration deviation exceeded threshold: current(ms)={}, average(ms)={}, deviation(ms)={}, threshold(ms)={}",
+                    currentDuration.toMillis(), getAverage().toMillis(), currentDeviation.toMillis(),
+                    treshHoldValue.toMillis());
         }
 
         return currentDeviation;
