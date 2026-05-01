@@ -19,7 +19,7 @@ This project processes structured profiling logs from device testing equipment (
 ## Project Structure
 
 ```
-parcer/
+parser/
 ├── src/
 │   ├── main/java/com/example/
 │   │   ├── LogAnalyser.java              # Main entry point
@@ -59,7 +59,7 @@ parcer/
 ## Building
 
 ```bash
-cd parcer
+cd parser
 mvn clean package
 ```
 
