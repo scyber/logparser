@@ -19,7 +19,7 @@ public class LogAnalyser {
 
 	public static void main(String[] args) {
 		if (args.length < 3) {
-			System.err.println("sage: java -jar log-analyzer.jar <logfile> <threshold_ms> <sub_step>");
+			System.err.println("Usage: java -jar log-analyzer.jar <logfile> <threshold_ms> <sub_step>");
 			System.exit(1);
 		}
 		logger.info("Parsing log started {}", LocalDateTime.now());

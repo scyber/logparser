@@ -13,7 +13,12 @@ import com.example.model.ProfilingEvent;
 
 public class EventProcessor {
 
-    private final Logger logger = LoggerFactory.getLogger(EventProcessor.class);
+    /*
+     * Potential issue with open/close test e.g. BEGIN/END cluold be closed with
+     * different even
+     */
+
+    private static final Logger logger = LoggerFactory.getLogger(EventProcessor.class);
     private final Deque<ActiveStep> stack = new ArrayDeque<>();
     private final StepAggregator aggregator;
 

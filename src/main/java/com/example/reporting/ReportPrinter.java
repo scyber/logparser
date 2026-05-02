@@ -6,23 +6,28 @@ import com.example.stats.DurationStats;
 
 public class ReportPrinter {
 
-    public static void printSubtestSummary(StepAggregator aggregator) {
-    	System.out.println("SUBTEST PERFORMANCE SUMMARY");
-    	System.out.println("------------------------------------------------");
-    	System.out.printf("%-30s %8s %10s %10s%n",
-        	"Subtest", "Count", "Avg(ms)", "Max(ms)");
+	/*
+	 * This could be rework and pass Map<String,DurationStats> Printer should not
+	 * know about StepAggregator
+	 */
 
-    	for (Map.Entry<String, DurationStats> e : aggregator.getStats().entrySet()) {
-        	DurationStats s = e.getValue();
-        	System.out.printf(
-            	"%-30s %8d %10d %10d%n",
-            	e.getKey(),
-            	s.getCount(),
-            	s.getAverage().abs().toMillis(),
-            	s.getMax().toMillis()
-				
-        	);
-    	}
+	public static void printSubtestSummary(StepAggregator aggregator) {
+		System.out.println("SUBTEST PERFORMANCE SUMMARY");
+		System.out.println("------------------------------------------------");
+		System.out.printf("%-30s %8s %10s %10s%n",
+				"Subtest", "Count", "Avg(ms)", "Max(ms)");
+
+		for (Map.Entry<String, DurationStats> e : aggregator.getStats().entrySet()) {
+			DurationStats s = e.getValue();
+			System.out.printf(
+					"%-30s %8d %10d %10d%n",
+					e.getKey(),
+					s.getCount(),
+					s.getAverage().toMillis(),
+					s.getMax().toMillis()
+
+			);
+		}
 	}
 
 }

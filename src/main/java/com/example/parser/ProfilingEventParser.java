@@ -13,7 +13,7 @@ import com.example.model.ProfilingEvent;
 
 public class ProfilingEventParser {
 
-	private final Logger logger = LoggerFactory.getLogger(ProfilingEventParser.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProfilingEventParser.class);
 	/*
 	 * Pattern matcher could be moved to resources as external resource or somehow
 	 * provided externally for processing even from
@@ -37,7 +37,7 @@ public class ProfilingEventParser {
 			return Optional.of(new ProfilingEvent(ts, type, name, qual));
 		} catch (Exception e) {
 			logger.error("Failed to parse line {}", line);
-			// logging exception parcing
+			// logging exception parsing
 			// malformed timestamp or enum
 			return Optional.empty();
 		}

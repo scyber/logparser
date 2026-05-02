@@ -123,9 +123,8 @@ public class StepAggregatorTest {
 
     @Test
     void testGetStatsReturnsImmutableMap() {
-        Map<String, DurationStats> stats1 = aggregator.getStats();
-        Map<String, DurationStats> stats2 = aggregator.getStats();
 
-        Assertions.assertNotSame(stats1, stats2);
+        Assertions.assertThrows(UnsupportedOperationException.class,
+                () -> aggregator.getStats().put("key", null));
     }
 }

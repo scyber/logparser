@@ -11,10 +11,10 @@ public class DurationStats {
     // ToDo Threshold could be in a param command line for better way and
     // flexibility
 
-    private final Duration treshHoldValue;
+    private final Duration thresholdValue;
 
     public DurationStats(long thresholdValue) {
-        this.treshHoldValue = Duration.ofMillis(thresholdValue);
+        this.thresholdValue = Duration.ofMillis(thresholdValue);
     }
 
     private long count = 0;
@@ -32,11 +32,11 @@ public class DurationStats {
 
         currentDeviation = calculateDeviation(currentDuration);
         // ToDo compare to THRESHOLD
-        if (currentDuration.compareTo(treshHoldValue) > 0) {
+        if (currentDuration.compareTo(thresholdValue) > 0) {
             log.warn(
                     "Duration deviation exceeded threshold: current(ms)={}, average(ms)={}, deviation(ms)={}, threshold(ms)={}",
                     currentDuration.toMillis(), getAverage().toMillis(), currentDeviation.toMillis(),
-                    treshHoldValue.toMillis());
+                    thresholdValue.toMillis());
         }
 
         return currentDeviation;
@@ -64,7 +64,7 @@ public class DurationStats {
         }
 
         Duration average = getAverage();
-        Duration cDuration = d.abs();
+        Duration cDuration = d;
         return cDuration.minus(average).abs();
     }
 }
