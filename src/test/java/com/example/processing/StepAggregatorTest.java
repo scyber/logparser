@@ -19,7 +19,7 @@ public class StepAggregatorTest {
 
     @BeforeEach
     void setUp() {
-        aggregator = new StepAggregator(500L); // 500ms threshold
+        aggregator = new StepAggregator(500L, "SUBTEST"); // 500ms threshold
     }
 
     @Test

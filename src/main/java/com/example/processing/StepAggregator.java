@@ -12,15 +12,17 @@ public class StepAggregator {
 
     private final Map<String, DurationStats> stats = new HashMap<>();
     private final Long thresholdValue;
+    private final String stepNameValue;
 
-    public StepAggregator(Long thresholdValue) {
+    public StepAggregator(Long thresholdValue, String stepNameValue) {
         this.thresholdValue = thresholdValue;
+        this.stepNameValue = stepNameValue;
     }
 
     // ToDo Hardcoded but might be better to Identify SUBTEST etc
 
     public void record(ProfilingEvent event, Duration duration) {
-        if (!event.getStepName().contains("SUBTEST"))
+        if (!event.getStepName().contains(stepNameValue))
             return;
 
         String key = event.getQualifier().orElse(event.getStepName());
