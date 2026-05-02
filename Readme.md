@@ -178,7 +178,7 @@ Log4j2 is configured via `src/main/resources/log4j2.xml`. By default, logs go to
 
 Currently, the application has some hardcoded configuration (see Known Issues):
 
-1. **SUBTEST Filter** - Only events containing "SUBTEST" are aggregated
+1. **SUBTEST Filter** - Only events containing "SUBTEST" or "REMOVAL" or "INSERTION" are aggregated
 2. **Threshold Pattern** - Log format is regex-based and cannot be modified at runtime
 3. **Time Format** - Expects `HH:MM:SS.mmm` format exclusively
 
@@ -196,24 +196,9 @@ The project includes basic parsing tests in `ProfilingEventParserTest.java`. The
 - Correct parsing of END events
 - Handling of qualified and unqualified events
 
-## Known Issues & Technical Debt
-
-### ⚠️ Code Quality Issues
-
-1. **Typo: `treshHoldValue` → `thresholdValue`**
-   - Found in `StepAggregator.java` and `DurationStats.java`
-   - Recommendation: Rename for consistency
-
-2. **Incomplete Test** - `ProfilingEventParserTest.testParceFailed()` is empty
-   - Either implement the test or remove the placeholder
-
-3. **Suboptimal Null Handling** - `EventProcessor.java` line 22
-   - Current: `if(event.getQualifier().orElse(null) != null)`
-   - Better: Use `Optional.ifPresent()` instead
-
 ### 🔴 Limitations
 
-1. **Hardcoded Step Filter** - Only processes events with "SUBTEST" in the name
+1. **Separate analitics Step Filter** - Only processes events with "SUBTEST" or "INSERTION" or "REMOVAL" in the name
    - Cannot aggregate other event types without code changes
    - Could be parameterized via configuration
 
