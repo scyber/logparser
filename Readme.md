@@ -217,11 +217,7 @@ The project includes basic parsing tests in `ProfilingEventParserTest.java`. The
    - Cannot aggregate other event types without code changes
    - Could be parameterized via configuration
 
-2. **Static Threshold Constant** - `DurationStats.THRESHOLD` is hardcoded
-   - Currently uses command-line argument, but inconsistently applied
-   - Consider centralizing threshold logic
-
-3. **Fixed Log Format** - Regex pattern in `ProfilingEventParser` is hardcoded
+2. **Fixed Log Format** - Regex pattern in `ProfilingEventParser` is hardcoded
    - Could be externalized to properties file for flexibility
 
 ## Future Enhancements
